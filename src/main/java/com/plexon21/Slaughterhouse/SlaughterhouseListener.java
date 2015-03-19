@@ -1,14 +1,3 @@
-//*******************************************************************************
-// Title:              	SlaughterhouseListener
-// Author:             	Plexon21
-// Programmed for:	   	SwissSMP.ch
-// Class Description:	Listener for slaughterhouse plugin, contains most of the
-//						plugin functionality.
-//-------------------------------------------------------------------------------
-// History:
-// 2015-03-17			First Implementation with Permissions and basic 
-//						functionality 
-//*******************************************************************************
 package com.plexon21.Slaughterhouse;
 
 import java.util.ArrayList;
@@ -22,12 +11,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Listener for slaughterhouse plugin, contains most of its functionality.
+ * 
+ * @author Plexon21
+ *
+ */
 public class SlaughterhouseListener implements Listener {
 	private List<Material> MeatList = new ArrayList<Material>();
 	private List<EntityType> AnimalList = new ArrayList<EntityType>();
 
 	public SlaughterhouseListener() {
-		//Initialize all meat-types and animals
+		// Initialize all meat-types and animals
 		MeatList.add(Material.RAW_BEEF);
 		MeatList.add(Material.COOKED_BEEF);
 		MeatList.add(Material.RAW_CHICKEN);
@@ -45,54 +40,74 @@ public class SlaughterhouseListener implements Listener {
 		AnimalList.add(EntityType.SHEEP);
 	}
 
+	/**
+	 * 
+	 * @param deathEvent
+	 */
 	@EventHandler
-	public void onAnimalDeath(EntityDeathEvent event) {
-		//only fire if the killed entity is in AnimalList
-		if (AnimalList.contains(event.getEntityType())) {
-			//drops only double if the killer is a player who has permission
-			Player killer = event.getEntity().getKiller();
+	public void onAnimalDeath(EntityDeathEvent deathEvent) {
+		// only fire if the killed entity is in AnimalList
+		if (AnimalList.contains(deathEvent.getEntityType())) {
+			// drops only double if the killer is a player who has permission
+			Player killer = deathEvent.getEntity().getKiller();
 			if (!killer.equals(null)
-					&& killer.hasPermission(SlaughterhousePermission.MEAT.getValue())) {
-				if (killer.hasPermission(SlaughterhousePermission.OTHER.getValue())) {
-					doubleAll(event);
+					&& killer.hasPermission(SlaughterhousePermission.MEAT
+							.getValue())) {
+				if (killer.hasPermission(SlaughterhousePermission.OTHER
+						.getValue())) {
+					doubleAll(deathEvent);
 				} else {
-					doubleMeat(event);
+					doubleMeat(deathEvent);
 				}
 			} else if (!killer.equals(null)
-					&& killer.hasPermission(SlaughterhousePermission.OTHER.getValue())) {
-				doubleOther(event);
+					&& killer.hasPermission(SlaughterhousePermission.OTHER
+							.getValue())) {
+				doubleOther(deathEvent);
 			}
 		}
 	}
-	// doubles all drops other than meat
-	private void doubleOther(EntityDeathEvent event) {
+
+	/**
+	 * double all other drops in deathEvent
+	 * 
+	 * @param deathEvent
+	 */
+	private void doubleOther(EntityDeathEvent deathEvent) {
 		List<ItemStack> duplicatedItems = new ArrayList<>();
-		for (ItemStack currentStack : event.getDrops()) {
+		for (ItemStack currentStack : deathEvent.getDrops()) {
 			if (!MeatList.contains(currentStack.getType())) {
 				duplicatedItems.add(currentStack.clone());
 			}
 		}
-		event.getDrops().addAll(duplicatedItems);
+		deathEvent.getDrops().addAll(duplicatedItems);
 	}
 
-	// double all meat drops
-	private void doubleMeat(EntityDeathEvent event) {
+	/**
+	 * double all meat-drops (contained in MeatList) in deathEvent
+	 * 
+	 * @param deathEvent
+	 */
+	private void doubleMeat(EntityDeathEvent deathEvent) {
 		List<ItemStack> duplicatedItems = new ArrayList<>();
-		for (ItemStack currentStack : event.getDrops()) {
+		for (ItemStack currentStack : deathEvent.getDrops()) {
 			if (MeatList.contains(currentStack.getType())) {
 				duplicatedItems.add(currentStack.clone());
 			}
 		}
-		event.getDrops().addAll(duplicatedItems);
+		deathEvent.getDrops().addAll(duplicatedItems);
 	}
 
-	//double all drops
-	private void doubleAll(EntityDeathEvent event) {
+	/**
+	 * double all drops in deathEvent
+	 * 
+	 * @param deathEvent
+	 */
+	private void doubleAll(EntityDeathEvent deathEvent) {
 		List<ItemStack> duplicatedItems = new ArrayList<>();
-		for (ItemStack currentStack : event.getDrops()) {
+		for (ItemStack currentStack : deathEvent.getDrops()) {
 			duplicatedItems.add(currentStack.clone());
 		}
-		event.getDrops().addAll(duplicatedItems);
+		deathEvent.getDrops().addAll(duplicatedItems);
 
 	}
 }

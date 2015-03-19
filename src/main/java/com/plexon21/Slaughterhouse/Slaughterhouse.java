@@ -1,22 +1,19 @@
-//*******************************************************************************
-// Title:              	Slaughterhouse
-// Author:             	Plexon21
-// Programmed for:	   	SwissSMP.ch
-// Class Description:	Main class for the plugin.
-//-------------------------------------------------------------------------------
-// History:
-// 2015-03-17			First Implementation with Permissions and basic 
-//						functionality 
-//*******************************************************************************
 package com.plexon21.Slaughterhouse;
-
 import org.bukkit.plugin.java.JavaPlugin;
-
+/**
+ * This class contains the initialization of the plugin.
+ * 
+ * @author Plexon21
+ *
+ */
 public class Slaughterhouse extends JavaPlugin {
 
+	/**
+	 * Enable the plugin on serverstart or after reload
+	 */
 	@Override
 	public void onEnable() {
-		//register a listener for the slaughterhouse
+		//register a SlaughethousListener to add functionality
 		getServer().getPluginManager().registerEvents(new SlaughterhouseListener(), this);
 		saveDefaultConfig();
 		getConfig();

@@ -1,16 +1,11 @@
-//*******************************************************************************
-// Title:              	SlaughterhousePermission
-// Author:             	Plexon21
-// Programmed for:	   	SwissSMP.ch
-// Class Description:	Enum of all Permissions for the Plugin to centralize 
-//						changes.
-//-------------------------------------------------------------------------------
-// History:
-// 2015-03-17			First Implementation with Permissions and basic 
-//						functionality 
-//*******************************************************************************
 package com.plexon21.Slaughterhouse;
 
+/**
+ * Enum of all Permissions for the Plugin to centralize changes.
+ * 
+ * @author Plexon21
+ *
+ */
 public enum SlaughterhousePermission {
 	MEAT("p21.slaughterhouse.meat"), 
 	OTHER("p21.slaughterhouse.other");
