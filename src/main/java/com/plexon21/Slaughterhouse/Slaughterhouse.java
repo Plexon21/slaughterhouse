@@ -1,5 +1,8 @@
 package com.plexon21.Slaughterhouse;
+
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
 /**
  * This class contains the initialization of the plugin.
  * 
@@ -13,13 +16,14 @@ public class Slaughterhouse extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		//register a SlaughethousListener to add functionality
-		getServer().getPluginManager().registerEvents(new SlaughterhouseListener(), this);
 		saveDefaultConfig();
-		getConfig();
+		FileConfiguration config = getConfig();
+		
+		getServer().getPluginManager().registerEvents(new SlaughterhouseListener(config), this);
+		this.getCommand("slaughterhouse").setExecutor(new SlaughterhouseCommandHandler(this));
 	}
 
 	@Override
 	public void onDisable() {
-	}	
+	}
 }

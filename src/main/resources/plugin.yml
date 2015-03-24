@@ -13,3 +13,7 @@ permissions:
     p21.slaughterhouse.other:
         description: Double all drops of animals
         default: false
+commands:
+   slaughterhouse:
+      description: This command reloads the config from the file.
+      usage: /slaughterhouse reload
