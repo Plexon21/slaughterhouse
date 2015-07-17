@@ -20,7 +20,6 @@ public class Slaughterhouse extends JavaPlugin {
 		FileConfiguration config = getConfig();
 		
 		getServer().getPluginManager().registerEvents(new SlaughterhouseListener(config), this);
-		this.getCommand("slaughterhouse").setExecutor(new SlaughterhouseCommandHandler(this));
 	}
 
 	@Override
