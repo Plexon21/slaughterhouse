@@ -11,7 +11,7 @@ permissions:
         description: Double the meatdrops of animals
         default: false
     p21.slaughterhouse.other:
-        description: Double all drops of animals
+        description: Double all other drops of animals (e.g. wool, leather)
         default: false
 commands:
    slaughterhouse:
