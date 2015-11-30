@@ -39,11 +39,11 @@ public class SlaughterhouseListener implements Listener {
 		if (config.getBoolean("animals.chicken", true))
 			AnimalList.add(EntityType.CHICKEN);
 		if (config.getBoolean("animals.pig", true))
-		AnimalList.add(EntityType.PIG);
+			AnimalList.add(EntityType.PIG);
 		if (config.getBoolean("animals.rabbit", true))
-		AnimalList.add(EntityType.RABBIT);
+			AnimalList.add(EntityType.RABBIT);
 		if (config.getBoolean("animals.sheep", true))
-		AnimalList.add(EntityType.SHEEP);
+			AnimalList.add(EntityType.SHEEP);
 	}
 
 	/**
@@ -53,17 +53,20 @@ public class SlaughterhouseListener implements Listener {
 	@EventHandler
 	public void onAnimalDeath(EntityDeathEvent deathEvent) {
 		// only fire if the killed entity is in AnimalList
-		if (AnimalList.contains(deathEvent.getEntityType())) {
-			// drops only double if the killer is a player who has permission
-			Player killer = deathEvent.getEntity().getKiller();
-			if (!killer.equals(null) && killer.hasPermission(SlaughterhousePermission.MEAT.getValue())) {
-				if (killer.hasPermission(SlaughterhousePermission.OTHER.getValue())) {
-					doubleAll(deathEvent);
-				} else {
-					doubleMeat(deathEvent);
+		if (deathEvent != null) {
+			if (AnimalList.contains(deathEvent.getEntityType())) {
+				// drops only double if the killer is a player who has
+				// permission
+				Player killer = deathEvent.getEntity().getKiller();
+				if (killer != null && killer.hasPermission(SlaughterhousePermission.MEAT.getValue())) {
+					if (killer.hasPermission(SlaughterhousePermission.OTHER.getValue())) {
+						doubleAll(deathEvent);
+					} else {
+						doubleMeat(deathEvent);
+					}
+				} else if (killer != null && killer.hasPermission(SlaughterhousePermission.OTHER.getValue())) {
+					doubleOther(deathEvent);
 				}
-			} else if (!killer.equals(null) && killer.hasPermission(SlaughterhousePermission.OTHER.getValue())) {
-				doubleOther(deathEvent);
 			}
 		}
 	}
@@ -74,13 +77,15 @@ public class SlaughterhouseListener implements Listener {
 	 * @param deathEvent
 	 */
 	private void doubleOther(EntityDeathEvent deathEvent) {
-		List<ItemStack> duplicatedItems = new ArrayList<>();
-		for (ItemStack currentStack : deathEvent.getDrops()) {
-			if (!MeatList.contains(currentStack.getType())) {
-				duplicatedItems.add(currentStack.clone());
+		if (deathEvent != null) {
+			List<ItemStack> duplicatedItems = new ArrayList<>();
+			for (ItemStack currentStack : deathEvent.getDrops()) {
+				if (!MeatList.contains(currentStack.getType())) {
+					duplicatedItems.add(currentStack.clone());
+				}
 			}
+			deathEvent.getDrops().addAll(duplicatedItems);
 		}
-		deathEvent.getDrops().addAll(duplicatedItems);
 	}
 
 	/**
@@ -89,13 +94,15 @@ public class SlaughterhouseListener implements Listener {
 	 * @param deathEvent
 	 */
 	private void doubleMeat(EntityDeathEvent deathEvent) {
-		List<ItemStack> duplicatedItems = new ArrayList<>();
-		for (ItemStack currentStack : deathEvent.getDrops()) {
-			if (MeatList.contains(currentStack.getType())) {
-				duplicatedItems.add(currentStack.clone());
+		if (deathEvent != null) {
+			List<ItemStack> duplicatedItems = new ArrayList<>();
+			for (ItemStack currentStack : deathEvent.getDrops()) {
+				if (MeatList.contains(currentStack.getType())) {
+					duplicatedItems.add(currentStack.clone());
+				}
 			}
+			deathEvent.getDrops().addAll(duplicatedItems);
 		}
-		deathEvent.getDrops().addAll(duplicatedItems);
 	}
 
 	/**
@@ -104,11 +111,13 @@ public class SlaughterhouseListener implements Listener {
 	 * @param deathEvent
 	 */
 	private void doubleAll(EntityDeathEvent deathEvent) {
-		List<ItemStack> duplicatedItems = new ArrayList<>();
-		for (ItemStack currentStack : deathEvent.getDrops()) {
-			duplicatedItems.add(currentStack.clone());
+		if (deathEvent != null) {
+			List<ItemStack> duplicatedItems = new ArrayList<>();
+			for (ItemStack currentStack : deathEvent.getDrops()) {
+				duplicatedItems.add(currentStack.clone());
+			}
+			deathEvent.getDrops().addAll(duplicatedItems);
 		}
-		deathEvent.getDrops().addAll(duplicatedItems);
 
 	}
 }
